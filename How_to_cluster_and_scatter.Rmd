@@ -6,6 +6,7 @@ output: html_document
 ##Scatter  
 First, lets create a **basic scatter plot** of the flow data as we see in flowjo. 
 So, set your working directory and load the file
+
 ```{rmessage = FALSE, warning = FALSE, include = TRUE}
 library(dendextend)
 setwd("~/Desktop/R work/FlowCore")
@@ -63,7 +64,7 @@ Here we will combine the basic scatter plot with the kmeans clustering data
 ```{r, fig.align= "center"}
 plot(log10(B_710_50.A)~log10(V_450_50.A), X, col = kc$cluster)
 ```
-This will plot teh same graph as before, but colour the dots based on the 1-8 clusters. The colours correspond to numbers 1-8 in this order:
+This will plot the same graph as before, but colour the dots based on the 1-8 clusters. The colours correspond to numbers 1-8 in this order:
 Black, Red, Green, Blue, Cyan, Magenta, Yellow, Grey.
 
 Using these, we can compare back to the K$centers data to see which cells are where on the scatter plot!
