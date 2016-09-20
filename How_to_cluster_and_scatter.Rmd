@@ -1,0 +1,71 @@
+---
+title: "How_to_cluster"
+output: html_document
+---
+#How to: Clustering and Scattering 
+##Scatter  
+First, lets create a **basic scatter plot** of the flow data as we see in flowjo. 
+So, set your working directory and load the file
+```{rmessage = FALSE, warning = FALSE, include = TRUE}
+library(dendextend)
+setwd("~/Desktop/R work/FlowCore")
+read.csv("N Concatflow.csv") -> X
+head(X)
+```
+
+This should import the files as a data.frame, in this format we can set our axis as any of the columns in the data. (for flow data like this we may also want to log10 transfor the files)
+
+```{r, fig.cap="Macrophage CD33 and CD14 expression", fig.align = "center"}
+plot(log10(B_710_50.A)~log10(V_450_50.A), X)
+```
+  
+##Now lets **cluster** the same data!  
+Here i will show you two ways to cluster the same data. The first method, using **euclidian** distance we will display as a cluster tree. The second **kmeans** we will overlay over the original scatter plot.  
+
+For both of these methods we will need scale our data first.
+```{r, warning = FALSE}
+apply(X,2,mean) -> m
+ apply(X,2,sd) -> s
+ scale(X,m,s) -> xs
+```
+xs is now our scaled data, have a look at it by using head(x) to see a fragment of the top of the data
+```{r}
+head(xs)
+```
+
+###Euclidian clustering (Hierarchical)
+
+The actual clustering itself is easy.  
+First we find teh distances between the data points (Euclidean is the default method for this!) The distance here ive named "distance" and the clustered information "hc.c"
+```{r}
+dist(xs) -> distance
+hclust(distance) -> hc.c
+```
+Now if we want to see it, just use the following code. (the hang = -1 aligns the bottom of the graph)
+```{r, fig.align = "center"}
+plot(hc.c, hang = -1)
+```
+
+###Kmeans Clustering (Non-Hierarchical)
+Here we will use the scaled data (xs) from before. We will also tell the algorithm to cut the cluster into 8 subsets. And put the whole thing as "kc"
+```{r}
+kmeans(xs, 8) -> kc
+```
+Now if we want to see the relative expression for each of these markers for each subset, all we do is: (the "$" simply means this feature(column) of Kc)
+```{r}
+kc$centers
+```
+
+### Scatter plot coloured by kmeans clustering subsets
+
+Here we will combine the basic scatter plot with the kmeans clustering data
+
+```{r, fig.align= "center"}
+plot(log10(B_710_50.A)~log10(V_450_50.A), X, col = kc$cluster)
+```
+This will plot teh same graph as before, but colour the dots based on the 1-8 clusters. The colours correspond to numbers 1-8 in this order:
+Black, Red, Green, Blue, Cyan, Magenta, Yellow, Grey.
+
+Using these, we can compare back to the K$centers data to see which cells are where on the scatter plot!
+
+##DONE!

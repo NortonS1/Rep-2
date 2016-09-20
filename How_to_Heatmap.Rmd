@@ -1,0 +1,32 @@
+---
+title: "How to: Heatmap"
+output: "html_document"
+---
+# How to: Heatmap
+
+First, load the file and packages 
+```{r, message = FALSE, warning = FALSE}
+setwd("~/Desktop/R work/FlowCore")
+read.csv("N Concatflow.csv") -> x
+library(ComplexHeatmap)
+library(dendextend)
+```
+Next, scale the data by columns (log transformed)
+```{r, warning = FALSE}
+as.matrix(x) -> Xm
+log10(Xm) -> Xl
+Xl[!rowSums(!is.finite(Xl)),] -> Xl
+apply(Xl,2,scale) -> Xs
+```
+Now set up your colour palette
+```{r}
+My_Palette <- colorRampPalette(c("navy","aliceblue","bisque","chocolate1","firebrick"))(256)
+```
+**Finally, run the heatmap**
+```{r, fig.cap="Single Cell analysis of Macrophage populations in NTB tissue", fig.align = "center"}
+Heatmap(Xs, cluster_columns = FALSE, col = My_Palette, row_dend_width = unit(3,"cm"))
+```
+
+
+## DONE!
+
