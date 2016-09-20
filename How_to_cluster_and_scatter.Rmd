@@ -7,11 +7,10 @@ output: html_document
 First, lets create a **basic scatter plot** of the flow data as we see in flowjo. 
 So, set your working directory and load the file
 
-```{rmessage = FALSE, warning = FALSE, include = TRUE}
+```{r, message = FALSE, warning = FALSE, include = TRUE}
 library(dendextend)
 setwd("~/Desktop/R work/FlowCore")
 read.csv("N Concatflow.csv") -> X
-head(X)
 ```
 
 This should import the files as a data.frame, in this format we can set our axis as any of the columns in the data. (for flow data like this we may also want to log10 transfor the files)
